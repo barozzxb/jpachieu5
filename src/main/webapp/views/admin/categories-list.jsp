@@ -2,8 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 
-<a href="${pageContext.request.contextPath}/admin/category/add">Add
-	Category</a>
+<a href="${pageContext.request.contextPath}/admin/category/add">Add	Category</a>
 <table style="border: 1px solid black; width: 100%;">
 	<tr>
 		<th>STT</th>
@@ -27,7 +26,7 @@
 			<td><img height="150" width="200" src="${imgUrl}" /></td>
 			<td>${cate.categoryname}</td>
 			<td>${cate.status}</td>
-			<td>Image URL: ${imgUrl}</td>
+<%-- 			<td>Image URL: ${imgUrl}</td> --%>
 			<td><a
 				href="${pageContext.request.contextPath}/admin/category/edit?id=${cate.categoryId}">Sửa</a>
 				<a

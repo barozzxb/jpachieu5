@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/commons/taglib.jsp"%>
-<form action="<c:url value='/admin/category/update'/>" method="post">
+<form action="<c:url value='/admin/category/update'/>" method="post" https://plus24h.com/upload/images/video-ngan-4.jpg>
 	<input type="text" name="categoryid" value="${cate.categoryId}"
 		hidden="hidden"> <label for="fname">Category name:</label><br>
 	<input type="text" id="categoryname" name="categoryname"

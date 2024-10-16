@@ -20,7 +20,7 @@ import pj.xuanbao.services.ICategoryService;
 import pj.xuanbao.services.impl.CategoryServiceImpl;
 import pj.xuanbao.ultis.Constant;
 
-@MultipartConfig()
+@MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 1024 * 1024 * 5, maxRequestSize = 1024 * 1024 * 5 * 5)
 @WebServlet(urlPatterns = { "/admin/categories", "/admin/category/add", "/admin/category/insert",
 		"/admin/category/edit", "/admin/category/update", "/admin/category/delete" })
 
@@ -35,51 +35,28 @@ public class CategoryController extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		String url = req.getRequestURI();
-
 		if (url.contains("/admin/categories")) {
-
 			List<Category> list = cateService.findAll();
-
 			req.setAttribute("listcate", list);
-
 			req.getRequestDispatcher("/views/admin/categories-list.jsp").forward(req, resp);
-
 		} else if (url.contains("/admin/category/add")) {
-
 			req.getRequestDispatcher("/views/admin/category-add.jsp").forward(req, resp);
-
 		} else if (url.contains("/admin/category/edit")) {
-
 			int id = Integer.parseInt(req.getParameter("id"));
-
 			Category category = cateService.findById(id);
-
 			req.setAttribute("cate", category);
-
 			req.getRequestDispatcher("/views/admin/category-edit.jsp").forward(req, resp);
-
 		} else {
-
 			int id = Integer.parseInt(req.getParameter("id"));
-
 			try {
-
 				cateService.delete(id);
-
 			} catch (Exception e) {
-
 				// TODO Auto-generated catch block
-
 				e.printStackTrace();
-
 			}
-
 			// chuyển trang
-
 			resp.sendRedirect(req.getContextPath() + "/admin/categories");
-
 		}
-
 	}
 
 	@Override
@@ -87,171 +64,97 @@ public class CategoryController extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		String url = req.getRequestURI();
-
 		if (url.contains("/admin/category/insert")) {
-
 			// lấy dữ liệu từ form
-
 			String categoryname = req.getParameter("categoryname");
-
 			int status = Integer.parseInt(req.getParameter("status"));
-
 			String images = req.getParameter("images");
-
 			// đưa dữ liệu vào model
-
 			Category category = new Category();
-
 			category.setCategoryname(categoryname);
-
 			category.setStatus(status);
-
 			String fname = "";
-
 			String uploadPath = Constant.UPLOAD_DIRECTORY; // upload vào thư mục bất kỳ
-
 			File uploadDir = new File(uploadPath);
-
 			if (!uploadDir.exists())
-
 				uploadDir.mkdir();
-
 			try {
-
 				Part part = req.getPart("images1");
-
 				if (part.getSize() > 0) {
-
 					String filename = Paths.get(part.getSubmittedFileName()).getFileName().toString();
-
 					int index = filename.lastIndexOf(".");
-
 					String ext = filename.substring(index + 1);
-
 					fname = System.currentTimeMillis() + "." + ext;
-
 					part.write(uploadPath + "/" + fname);
-
 					category.setImages(fname);
-
 				} else if (images != null) {
-
 					category.setImages(images);
-
 				} else {
-
 					category.setImages("avatar.png");
-
 				}
-
 			} catch (FileNotFoundException fne) {
-
 				fne.printStackTrace();
-
 			}
-
 			// đưa model vào phương thức insert
-
 			cateService.insert(category);
-
 			// chuyển trang
-
 			resp.sendRedirect(req.getContextPath() + "/admin/categories");
-
 		}
 
 		if (url.contains("/admin/category/update")) {
-
 			// lấy dữ liệu từ form
-
 			int categoryid = Integer.parseInt(req.getParameter("categoryid"));
-
 			String categoryname = req.getParameter("categoryname");
-
 			int status = Integer.parseInt(req.getParameter("status"));
-
-			String images = req.getParameter("images");
-
+			String images = req.getParameter("images1");
 			// đưa dữ liệu vào model
-
 			Category category = cateService.findById(categoryid);
-
 			String fileold = category.getImages();
-
 			category.setCategoryname(categoryname);
-
 			category.setStatus(status);
-
 			String fname = "";
-
 			String uploadPath = Constant.UPLOAD_DIRECTORY; // upload vào thư mục bất kỳ
-
 			File uploadDir = new File(uploadPath);
-
 			if (!uploadDir.exists())
-
 				uploadDir.mkdir();
-
 			try {
-
-				Part part = req.getPart("images1");
-
+				Part part = req.getPart("images");
 				if (part.getSize() > 0) {
-
 					// xóa file cũ trên thư mục
-
 					if (!category.getImages().substring(0, 5).equals("https")) {
-
 						deleteFile(uploadPath + "\\" + fileold);
-
 					}
-
 					String filename = Paths.get(part.getSubmittedFileName()).getFileName().toString();
-
 					int index = filename.lastIndexOf(".");
-
 					String ext = filename.substring(index + 1);
-
 					fname = System.currentTimeMillis() + "." + ext;
-
 					part.write(uploadPath + "/" + fname);
-
 					category.setImages(fname);
-
 				} else if (images != null) {
-
 					category.setImages(images);
-
 				} else {
-
 					category.setImages(fileold);
-
 				}
-
 			} catch (FileNotFoundException fne) {
-
 				fne.printStackTrace();
-
 			}
-
 			// đưa model vào phương thức insert
-
 			cateService.update(category);
-
 			// chuyển trang
-
 			resp.sendRedirect(req.getContextPath() + "/admin/categories");
-
 		}
-
+		if (url.contains("/admin/category/delete")) {
+			int categoryid = Integer.parseInt(req.getParameter("categoryid"));
+			cateService.delete(categoryid);
+			// chuyển trang
+			resp.sendRedirect(req.getContextPath() + "/admin/categories");
+		}
 	}
 
 	public static void deleteFile(String filePath) throws IOException {
 
 		Path path = Paths.get(filePath);
-
 		Files.delete(path);
-
 	}
 
 }

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,11 +7,23 @@
 <title>HomeAdmin</title>
 </head>
 <body>
-<h1>Welcome, admin ${username}!</h1>
-    <p><strong>Email:</strong>&nbsp ${email}</p> 
-    <p><strong>Full Name:</strong>&nbsp ${fullname}</p>
-    <p><strong>Phone:</strong>&nbsp ${phone}</p>
-    <a href="${pageContext.request.contextPath}/logout" class="logout">Logout</a>
-
+	<h1>Welcome, admin ${username}!</h1>
+	<p>
+		<strong>Email:</strong>&nbsp ${email}
+	</p>
+	<p>
+		<strong>Full Name:</strong>&nbsp ${fullname}
+	</p>
+	<p>
+		<strong>Phone:</strong>&nbsp ${phone}
+	</p>
+	<a href="${pageContext.request.contextPath}/logout" class="logout">Logout</a>
+	<br></br>
+	<div>
+		<a href="${pageContext.request.contextPath}/admin/categories" class="categories">Categories</a> 
+		<a href="${pageContext.request.contextPath}/admin/videos" class="video">Video</a>
+	</div>
+	
+	<a href="${pageContext.request.contextPath}/admin/findvideos" class="findvideo">Find Video</a>
 </body>
 </html>
