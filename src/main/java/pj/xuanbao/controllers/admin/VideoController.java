@@ -25,7 +25,7 @@ import pj.xuanbao.ultis.Constant;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 1024 * 1024 * 5, maxRequestSize = 1024 * 1024 * 5 * 5)
 @WebServlet(urlPatterns = { "/admin/videos", "/admin/video/add", "/admin/video/insert",
-		"/admin/video/edit", "/admin/video/update", "/admin/video/delete", "/admin/findvideos"})
+		"/admin/video/edit", "/admin/video/update", "/admin/video/delete", "/admin/video/findvideo"})
 
 public class VideoController extends HttpServlet{
 
@@ -57,9 +57,11 @@ public class VideoController extends HttpServlet{
 			Video Video = vidService.findById(id);
 			req.setAttribute("vid", Video);
 			req.getRequestDispatcher("/views/admin/video-edit.jsp").forward(req, resp);
-		} else if (url.contains("/admin/findvideo")){
-			req.getRequestDispatcher("/views/admin/findvideo.jsp").forward(req, resp);
-		}else {
+		} 
+//		else if (url.contains("/admin/findvideo")){
+//			req.getRequestDispatcher("/views/admin/findvideo.jsp").forward(req, resp);
+//		}
+		else {
 			int id = Integer.parseInt(req.getParameter("videoid"));
 			try {
 				vidService.delete(id);
@@ -190,6 +192,16 @@ public class VideoController extends HttpServlet{
 			vidService.delete(videoid);
 			// chuyển trang
 			resp.sendRedirect(req.getContextPath() + "/admin/videos");
+		}
+		
+		if (url.contains("/admin/video/findvideo")) {
+			String findkey = req.getParameter("findkey");
+			if(findkey != null) {
+				List<Video> list = vidService.findByVideoName(findkey);
+				req.setAttribute("listvideo", list);
+				req.getRequestDispatcher("/views/admin/video-list.jsp").forward(req, resp);
+			}
+			
 		}
 	}
 

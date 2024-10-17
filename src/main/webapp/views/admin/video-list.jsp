@@ -3,6 +3,12 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 
 <a href="${pageContext.request.contextPath}/admin/video/add">Add Video</a>
+<br></br>
+<form action="/jpachieu5/admin/video/findvideo" method=post>
+	<input type="text" alt="Search by name..." class="form-control" id="findkey" name="findkey">
+	<button type="submit" class="btn btn-primary">Search</button>
+	<a href="${pageContext.request.contextPath}/admin/videos">Reset</a>
+</form>
 <table style="border: 1px solid black; width: 100%;">
 	<tr>
 		<th>STT</th>
